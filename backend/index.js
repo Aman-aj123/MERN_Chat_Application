@@ -19,11 +19,17 @@ app.get("/", (req, res) => {
 const Signup = require("./routes/auth/Signup");
 const Login = require("./routes/auth/Login");
 const UpdateUser = require("./routes/auth/UpdateUser");
+const GetUser = require("./routes/auth/GetUser");
+const ChatRoute = require("./routes/Chat/ChatRoute");
+const MessageRoute = require("./routes/Chat/MessageRoute");
 
 //------> Custom routes
 app.use("/api/user/auth/signup", Signup);
 app.use("/api/user/auth/login", Login);
 app.use("/api/user/auth/update", UpdateUser);
+app.use("/api/user/auth/getuser", GetUser);
+app.use("/api/chat", ChatRoute);
+app.use("/api/message", MessageRoute);
 
 
 

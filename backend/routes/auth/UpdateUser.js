@@ -1,10 +1,11 @@
 const express = require("express");
 const router = express.Router();
 
-const UserModel = require("../../models/User");
+const { UserModel } = require("../../models/UserModel");
 const { fetchUser } = require("../../middleware/fetchUser");
 
 const bcrypt = require('bcryptjs');
+
 
 router.put("/:id", fetchUser, async (req, res) => {
 
@@ -19,7 +20,7 @@ router.put("/:id", fetchUser, async (req, res) => {
                res.status(401).json({ sucess: false, error: "Not allowed..." });
           };
 
-          const findedUser = UserModel.findById(req.params.id);
+          const findedUser = await UserModel.findById(req.params.id);
 
           if (!findedUser) {
                res.status(400).json({ sucess: false, error: "User not found.." });
@@ -27,6 +28,7 @@ router.put("/:id", fetchUser, async (req, res) => {
 
           const { password, email, name } = req.body;
 
+          // If the credentials are not provided
           if (!password || !email || !name) {
                res.status(400).json({ sucess: false, error: "Please enter the credentials to update.." });
           };
@@ -42,9 +44,8 @@ router.put("/:id", fetchUser, async (req, res) => {
                password: hashedPassword
           };
 
-          await UserModel.updateOne({ _id: findedUser._id, updatedInfo });
-          console.log("user updated sucessfully with: ")
-          console.log(findedUser)
+          await UserModel.updateOne({ _id: findedUser._id,}, updatedInfo);
+
           res.status(200).json({ sucess: true, message: "Your credentials have sucessfully update.." });
 
      } catch (error) {
